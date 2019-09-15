@@ -123,9 +123,12 @@ def infer(inputs):
 
             calls.append(call)
 
+        blah = [x[0] for x in verb_counter.most_common(3) if x[1] > 1] + [x[0] for x in noun_counter.most_common(3) if x[1] > 1]
+        if len(blah) == 0:
+            blah = [x[0] for x in verb_counter.most_common(1)] + [x[0] for x in noun_counter.most_common(1)]
 
         d.append({
-            'name': ' '.join([x[0] for x in verb_counter.most_common(3) if x[1] > 1] + [x[0] for x in noun_counter.most_common(3) if x[1] > 1]),
+            'name': ' '.join(blah),
             'calls': calls
         })
 

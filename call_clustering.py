@@ -128,7 +128,6 @@ def infer(inputs):
             'name': ' '.join([x[0] for x in verb_counter.most_common(3) if x[1] > 1] + [x[0] for x in noun_counter.most_common(3) if x[1] > 1]),
             'calls': calls
         })
-        d[n]['calls'] = calls
 
     return json.dumps(d)
 

@@ -4,11 +4,13 @@ from numpy.linalg import norm
 import math
 import nltk
 import torch
-nltk.download('punkt')
+#nltk.download('punkt')
+from collections import Counter
+
 
 def infer(inputs):
     radius = 0.09
-
+    nlp = spacy.load("en_core_web_lg")
     sentences = []
     locations = []
 
@@ -72,10 +74,46 @@ def infer(inputs):
     kmeany = KMeans(init='k-means++').fit(total)
     labels = kmeany.labels_.tolist()
 
-    #print(labels)
     mapper = {}
     for call, label in enumerate(labels):
         mapper[call] = label
+
+    class Analysis:
+        def __init__(self, sentence):
+            self.sentence = sentence
+            self.nlpped = nlp(sentence)
+
+            self.nouns = [str(t.lemma_) for t in self.nlpped if (t.pos_ in ['PROPN', 'NOUN'] and
+                                                            t.lemma_ not in ['I', 'help'])]
+
+            self.verbs = [str(t.lemma_) for t in self.nlpped if
+                          (t.pos_ in ['VERB', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'] and
+                           t.lemma_ not in ['be', 'have', 'do', 'say', 'go', 'get', 'make', 'know', 'think', 'take',
+                                            'help', 'may', 'fear', 'see', 'stop', 'reach', 'seem', 'hope', 'want',
+                                            'would', 'cause', 'let', 'like', 'will'])]
+
+    analyses = []
+    for sentence in sentences:
+        analyses.append(Analysis(sentence))
+    d = {}
+    for n in set(mapper.values()):
+        nouns = []
+        for k in mapper.keys():
+            if mapper[k] == n:
+                nouns += analyses[k].nouns
+
+        noun_counter = Counter(nouns)
+
+        verbs = []
+        for k in mapper.keys():
+            if mapper[k] == n:
+                verbs += analyses[k].verbs
+
+        verb_counter = Counter(verbs)
+
+        d[n] = {}
+        d[n]['calls'] = [k for k in mapper.keys() if mapper[k] == n]
+        d[n]['name'] = ' '.join([x[0] for x in verb_counter.most_common(3) if x[1] > 1] + [x[0] for x in noun_counter.most_common(3) if x[1] > 1])
 
     return json.dumps(mapper)
 

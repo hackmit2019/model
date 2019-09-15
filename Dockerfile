@@ -1,5 +1,5 @@
 FROM python:3.7-slim-stretch
-RUN pip install nltk numpy torch sklearn
+RUN pip install nltk numpy torch sklearn spacy
 RUN mkdir -p app
 ADD call_clustering.py app/
 ADD encoder app/encoder

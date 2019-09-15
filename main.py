@@ -16,7 +16,6 @@ class MyServer(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         result = infer(post_data)
-        self.send_header("content-type", "application/json")
         self.send_response(200)
         self.end_headers()
         self.wfile.write(bytes(result, "utf-8"))

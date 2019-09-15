@@ -113,15 +113,16 @@ def infer(inputs):
 
         calls = []
         for k in mapper.keys():
-            call = {
-                'transcript': sentences[k],
-                'file': pass_in[k]['file'],
-                'lat': locations[k][0],
-                'lon': locations[k][1],
-                'id': pass_in[k]['id']
-            }
+            if mapper[k] == n:
+                call = {
+                    'transcript': sentences[k],
+                    'file': pass_in[k]['file'],
+                    'lat': locations[k][0],
+                    'lon': locations[k][1],
+                    'id': pass_in[k]['id']
+                }
 
-            calls.append(call)
+                calls.append(call)
 
         blah = [x[0] for x in verb_counter.most_common(3) if x[1] > 1] + [x[0] for x in noun_counter.most_common(3) if x[1] > 1]
         if len(blah) == 0:

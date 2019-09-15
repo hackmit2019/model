@@ -7,4 +7,5 @@ ADD main.py app/
 ADD models.py app/
 ADD extract_features.py app/
 WORKDIR app/
+RUN python -m spacy download en_core_web_sm
 CMD ["python", "main.py"]

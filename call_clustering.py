@@ -3,7 +3,7 @@ from numpy.linalg import norm
 import math
 import nltk
 import torch
-#nltk.download('punkt')
+nltk.download('punkt')
 from collections import Counter
 import spacy
 

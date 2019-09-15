@@ -6,4 +6,5 @@ ADD encoder app/encoder
 ADD main.py app/
 ADD models.py app/
 ADD extract_features.py app/
-CMD ["python", "app/main.py"]
+WORKDIR app/
+CMD ["python", "main.py"]
